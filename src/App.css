@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.star-rating{
+    font-size : 25px;
+  }
+  
+  .star{
+    cursor :pointer;
+  }
+  
+  .star.hover{
+    color : gold;
+  }
+  
+  .star.active{
+    color : orange;
+  }
