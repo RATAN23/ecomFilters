@@ -1,8 +1,9 @@
 import './App.css'
-import { BrowserRouter, Route, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import {  RouterProvider, createBrowserRouter } from 'react-router-dom'
 import AppLayout from './components/app-layout';
 import Home from './pages/home';
 import Context from './context/context';
+import Cart from './pages/cart';
 
 function App() {
  
@@ -16,7 +17,8 @@ function App() {
           element : <Home/>
         },
         {
-
+          path : '/cart',
+          element : <Cart/>
         }
       ]
     }

@@ -9,10 +9,11 @@ const Home = () => {
   const [totalPages ,setTotalPages] = useState(0);
 
   const {
-    state : {products},
+    state : {products , cart},
+    dispatch,
     filterState : { sort , byStock , byRating , searchQuery }
   } = ShoppingCartState();
-
+   
   const filteredProducts = useMemo(() =>{
     let filteredProducts = products;
 
@@ -39,24 +40,35 @@ const Home = () => {
         return item.title.toLowerCase().includes(searchQuery.toLowerCase());
       })
     }
-    console.log(filteredProducts);
+   
     return filteredProducts;
   },[sort , byStock , byRating , searchQuery , products]);
 
   return (
     <div>
       <div className='py-9 flex'>
-     <Filters/> 
+     {/* <Filters/>  */}
      {
         filteredProducts.length >0 && (
           <div className='m-[20px] w-screen p-0 grid grid-cols-3 gap-9'>
             {  filteredProducts?.slice(page*10 - 10, page*10).map((prod) => {
-                return (<span className='h-[300px] w-[90%] p-[50px] border-4 text-center items-center border-gray-300 cursor-pointer ' key={prod.id}>
-                <img className = "w-[100%] h-[85%] mb-[3px] object-cover" src = {prod.thumbnail} alt={prod.title}></img>
+                const inCart = cart.some(p => p.id === prod.id);
+                return (<span className='h-[280px] w-[90%] p-[50px] border-4 text-center items-center border-gray-300 cursor-pointer ' key={prod.id}>
+                <img className = "w-[90%] h-[55%] object-fill" src = {prod.thumbnail} alt={prod.title}></img>
                 <span>{prod.title}</span>
                 <hr/>
                 <span>{prod.price}</span>
                 <Rating rating={Math.round(prod.rating)}/>
+                <button className={`px-2 mt-2 ${!inCart ? "bg-orange-400" : "bg-blue-400"} rounded-md  ${prod.stock == 0 ? "opacity-50" : ""}`}
+                disabled = {prod.stock == 0}
+                onClick={()=>{
+                  dispatch({
+                    type : inCart ? "REMOVE_FROM_CART" : "ADD_TO_CART",
+                    payload : prod,
+                  })
+                }}
+                > 
+                  {prod.stock > 0 ? !inCart ? "Add to Cart" : "Remove from Cart" : "Out of Stock" }</button>
                 </span>)
               })}
           </div>
